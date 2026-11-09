@@ -2,6 +2,7 @@
 
 #include <windows.h>
 #include <mfapi.h>
+#include <mferror.h>
 #include <mfidl.h>
 #include <mfreadwrite.h>
 #include <wrl/client.h>
@@ -58,7 +59,7 @@ static void print_media_types(IMFMediaSource* source) {
     for (DWORD index = 0;; ++index) {
         ComPtr<IMFMediaType> type;
         hr = reader->GetNativeMediaType(
-            MF_SOURCE_READER_FIRST_VIDEO_STREAM, index, &type);
+            static_cast<DWORD>(MF_SOURCE_READER_FIRST_VIDEO_STREAM), index, &type);
         if (hr == MF_E_NO_MORE_TYPES) break;
         if (FAILED(hr)) {
             std::wcerr << L"    GetNativeMediaType failed: 0x"
